@@ -2,19 +2,64 @@ package com.phantomxstudios.snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class Gameplay extends JPanel {
+public class Gameplay extends JPanel implements KeyListener, ActionListener{
+	
+	private ArrayList<Integer> snakeXLength = new ArrayList<>();
+	private ArrayList<Integer> snakeYLength = new ArrayList<>();
+	
+	private boolean left = false;
+	private boolean right = false;
+	private boolean up = false;
+	private boolean down = false;
+	
+	private ImageIcon rightface;
+	private ImageIcon leftface;
+	private ImageIcon upface;
+	private ImageIcon downface;
+	
+	private int lengthOfSnake = 3;
+	
+	private Timer timer;
+	private int delay = 100;
+	
+	private ImageIcon snakeBody;
+	
+	private int moves = 0;
+	
+	
 	private ImageIcon titleImage;
 	
 	public Gameplay() {
-		
+		addKeyListener(this);
+		setFocusable(true);
+		setFocusTraversalKeysEnabled(false);
+		timer = new Timer(delay, this);
+		timer.start();
 	}
 	
 	public void paint(Graphics g) {
 		
+		
+		if(moves == 0) {
+			snakeXLength.add(100);
+			snakeXLength.add(75);
+			snakeXLength.add(50);
+			
+			snakeYLength.add(100);
+			snakeYLength.add(100);
+			snakeYLength.add(100);
+			
+		}
 		
 		// Draw the title image
 		titleImage = new ImageIcon("snaketitle.jpg");
@@ -28,6 +73,62 @@ public class Gameplay extends JPanel {
 		g.setColor(Color.black);
 		g.fillRect(25, 75, 840, 575);
 		
+		rightface = new ImageIcon("rightface.png");
+		rightface.paintIcon(this, g, snakeXLength.get(0), snakeYLength.get(0));
+		
+		for (int i = 0; i < lengthOfSnake; i++) {
+			if (i == 0 && right) {
+				rightface = new ImageIcon("rightface.png");
+				rightface.paintIcon(this, g, snakeXLength.get(i), snakeYLength.get(i));
+			}
+			if (i == 0 && left) {
+				leftface = new ImageIcon("leftface.png");
+				leftface.paintIcon(this, g, snakeXLength.get(i), snakeYLength.get(i));
+			}
+			if (i == 0 && up) {
+				upface = new ImageIcon("upface.png");
+				upface.paintIcon(this, g, snakeXLength.get(i), snakeYLength.get(i));
+			}
+			if (i == 0 && down) {
+				downface = new ImageIcon("downface.png");
+				downface.paintIcon(this, g, snakeXLength.get(i), snakeYLength.get(i));
+			}
+			
+			if (i != 0) {
+				snakeBody = new ImageIcon("body.png");
+				snakeBody.paintIcon(this, g, snakeXLength.get(i), snakeYLength.get(i));
+			}
+		}
+		
+		g.dispose();
+		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
 
 }
