@@ -1,12 +1,14 @@
 package com.phantomxstudios.snake;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -16,6 +18,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
 	private ArrayList<Integer> snakeXLength = new ArrayList<>();
 	private ArrayList<Integer> snakeYLength = new ArrayList<>();
+	
+	private ArrayList<Integer> enemyXPos = new ArrayList<>();
+	private ArrayList<Integer> enemyYPos = new ArrayList<>();
 
 	private boolean left = false;
 	private boolean right = false;
@@ -37,19 +42,35 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 	private int moves = 0;
 
 	private ImageIcon titleImage;
+	
+	private ImageIcon enemy;
+	
+	private Random random = new Random();
+	
+	private int xPos = random.nextInt(34);
+	private int yPos = random.nextInt(23);
+	
+	private int score = 0;
 
+	
 	public Gameplay() {
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		timer = new Timer(delay, this);
 		timer.start();
-		this.requestFocusInWindow();
+		for (int i = 0; i < 845/25; i++) {
+			enemyXPos.add(25 + (25 * i));
+		}
+		for (int i = 0; i < 625/25; i++) {
+			enemyYPos.add(75 + (25 * i));
+		}
+		
 	}
 	
 
 	public void paint(Graphics g) {
-
+		
 		if (moves == 0) {
 			snakeXLength.add(100);
 			snakeXLength.add(75);
@@ -60,6 +81,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			snakeYLength.add(100);
 
 		}
+		//System.out.println("X = " + snakeXLength.get(0) + " Y = " + snakeYLength.get(0));
 
 		// Draw the title image
 		titleImage = new ImageIcon("titleimage.png");
@@ -72,6 +94,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 		// Draw background
 		g.setColor(Color.black);
 		g.fillRect(25, 75, 840, 575);
+		
+		// Draw Score
+		g.setColor(Color.white);
+		g.setFont(new Font("arial", Font.PLAIN, 14));
+		g.drawString("Score: " + score, 780, 30);
+		
+		// Draw Length
+		g.setColor(Color.white);
+		g.setFont(new Font("arial", Font.PLAIN, 14));
+		g.drawString("Length: " + lengthOfSnake, 780, 50);
 
 		rightface = new ImageIcon("rightface.png");
 		rightface.paintIcon(this, g, snakeXLength.get(0), snakeYLength.get(0));
@@ -99,6 +131,21 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 				snakeBody.paintIcon(this, g, snakeXLength.get(i), snakeYLength.get(i));
 			}
 		}
+		
+		enemy = new ImageIcon("enemy.png");
+		
+		if ((enemyXPos.get(xPos).equals(snakeXLength.get(0))) && (enemyYPos.get(yPos).equals(snakeYLength.get(0)))) {
+			System.out.println("Im collected");
+			score++;
+			snakeXLength.add(0);
+			snakeYLength.add(0);
+			lengthOfSnake++;
+			xPos = random.nextInt(34);
+			yPos = random.nextInt(23);
+		}
+		
+		enemy.paintIcon(this, g, enemyXPos.get(xPos), enemyYPos.get(yPos));
+		System.out.println("Enemy X = " + enemyXPos.get(xPos) + " Enemy Y = " + enemyYPos.get(yPos));
 
 		
 		g.dispose();
@@ -147,8 +194,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 					snakeYLength.set(i, snakeYLength.get(i) - 25);
 				else
 					snakeYLength.set(i, snakeYLength.get(i - 1));
-				if (snakeYLength.get(i) < 100)
-					snakeYLength.set(i, 600);
+				if (snakeYLength.get(i) < 75)
+					snakeYLength.set(i, 625);
 			}
 			repaint();
 		}
@@ -162,8 +209,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 					snakeYLength.set(i, snakeYLength.get(i) + 25);
 				else
 					snakeYLength.set(i, snakeYLength.get(i - 1));
-				if (snakeYLength.get(i) > 600)
-					snakeYLength.set(i, 100);
+				if (snakeYLength.get(i) > 625)
+					snakeYLength.set(i, 75);
 			}
 			repaint();
 		}
