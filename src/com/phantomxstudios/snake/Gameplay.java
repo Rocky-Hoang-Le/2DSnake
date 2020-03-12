@@ -148,6 +148,22 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 		System.out.println("Enemy X = " + enemyXPos.get(xPos) + " Enemy Y = " + enemyYPos.get(yPos));
 
 		
+		for (int i = 1; i < lengthOfSnake; i++) {
+			if (snakeXLength.get(i).equals(snakeXLength.get(0)) && snakeYLength.get(i).equals(snakeYLength.get(0))) {
+				right = false;
+				left = false;
+				up = false;
+				down = false;
+				
+				g.setColor(Color.white);
+				g.setFont(new Font("arial", Font.BOLD, 50));
+				g.drawString("Game Over", 300, 300);
+				
+				g.setFont(new Font("arial", Font.BOLD, 20));
+				g.drawString("Press Space to Restart", 350, 340);
+			}
+		}
+		
 		g.dispose();
 
 	}
@@ -228,6 +244,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			moves = 0;
+			score = 0;
+			lengthOfSnake = 3;
+			repaint();
+		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			System.out.println("Right Pressed");
 			moves++;
