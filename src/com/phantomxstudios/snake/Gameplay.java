@@ -44,7 +44,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 		setFocusTraversalKeysEnabled(false);
 		timer = new Timer(delay, this);
 		timer.start();
+		this.requestFocusInWindow();
 	}
+	
 
 	public void paint(Graphics g) {
 
@@ -98,6 +100,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			}
 		}
 
+		
 		g.dispose();
 
 	}
@@ -114,12 +117,59 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 					snakeXLength.set(i, snakeXLength.get(i) + 25);
 				else
 					snakeXLength.set(i, snakeXLength.get(i - 1));
-				if (snakeXLength.get(i) > 850)
+				if (snakeXLength.get(i) > 845)
 					snakeXLength.set(i, 25);
 			}
 			repaint();
-
 		}
+		
+		if (left) {
+			for (int i = lengthOfSnake - 2; i >= 0; i--) {
+				snakeYLength.set(i + 1, snakeYLength.get(i));
+			}
+			for (int i = lengthOfSnake - 1; i >= 0; i--) {
+				if (i == 0)
+					snakeXLength.set(i, snakeXLength.get(i) - 25);
+				else
+					snakeXLength.set(i, snakeXLength.get(i - 1));
+				if (snakeXLength.get(i) < 25)
+					snakeXLength.set(i, 845);
+			}
+			repaint();
+		}
+		
+		if (up) {
+			for (int i = lengthOfSnake - 2; i >= 0; i--) {
+				snakeXLength.set(i + 1, snakeXLength.get(i));
+			}
+			for (int i = lengthOfSnake - 1; i >= 0; i--) {
+				if (i == 0)
+					snakeYLength.set(i, snakeYLength.get(i) - 25);
+				else
+					snakeYLength.set(i, snakeYLength.get(i - 1));
+				if (snakeYLength.get(i) < 100)
+					snakeYLength.set(i, 600);
+			}
+			repaint();
+		}
+		
+		if (down) {
+			for (int i = lengthOfSnake - 2; i >= 0; i--) {
+				snakeXLength.set(i + 1, snakeXLength.get(i));
+			}
+			for (int i = lengthOfSnake - 1; i >= 0; i--) {
+				if (i == 0)
+					snakeYLength.set(i, snakeYLength.get(i) + 25);
+				else
+					snakeYLength.set(i, snakeYLength.get(i - 1));
+				if (snakeYLength.get(i) > 600)
+					snakeYLength.set(i, 100);
+			}
+			repaint();
+		}
+		
+		
+		
 
 	}
 
@@ -132,6 +182,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			System.out.println("Right Pressed");
 			moves++;
 			right = true;
 			if (!left)
@@ -144,7 +195,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			up = down = false;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+		else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			moves++;
 			left = true;
 			if (!right)
@@ -157,7 +208,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			up = down = false;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
+		else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			moves++;
 			up = true;
 			if (!down)
@@ -170,7 +221,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			left = right = false;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			moves++;
 			down = true;
 			if (!up)
